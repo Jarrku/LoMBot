@@ -1,0 +1,40 @@
+{
+  "name": "lom_bot",
+  "version": "1.0.0",
+  "main": "server.js",
+  "author": "Simon VDB",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "bufferutil": "^3.0.2",
+    "discord.js": "^11.2.1",
+    "discord.js-commando": "0.9.0",
+    "dotenv": "^4.0.0",
+    "mongoose": "^4.11.13"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.30",
+    "@types/dotenv": "^4.0.1",
+    "@types/mongoose": "^4.7.23",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.2"
+  },
+  "scripts": {
+    "transpile": "tsc --watch",
+    "start": "node build/server.js",
+    "deploy": "tsc && now --public && now alias"
+  },
+  "now": {
+    "alias": "lom",
+    "files": [
+      "build/**/*.js"
+    ],
+    "env": {
+      "NODE_ENV": "production",
+      "BOT_SECRET_PROD": "@lom_bot_secret_prod",
+      "BOT_SECRET_DEV": "@lom_bot_secret_dev",
+      "DB_USERNAME": "@lom_db_username",
+      "DB_PASSWORD": "@lom_db_password"
+    }
+  }
+}
