@@ -2,6 +2,7 @@ import { Message, Role, TextChannel } from "discord.js";
 import { Command, CommandoClient } from "discord.js-commando";
 import { createServer } from "http";
 import * as path from "path";
+import { isInRoleCollection } from "./common";
 import { addNewMessage } from "./dataAccess";
 
 import config from "./config";
@@ -30,8 +31,7 @@ client
     const { channel: { id }, member: { roles } } = msg;
 
     if (educhannels.includes(id)) {
-      const mentorIndex = Array.from(roles.values()).findIndex(((r) => r.name.toLowerCase() === "mentor"));
-      if (mentorIndex > -1)
+      if (isInRoleCollection(roles, undefined, ["mentor", "trial mentor"]))
         addNewMessage(msg);
     }
   });
