@@ -31,3 +31,12 @@ export const addNewMessage = (msg: DMessage) => {
     cb(user, newMsg);
   });
 };
+
+export const getOverview = async (): Promise<Array<{ discordId: string, total: number }>> => {
+  const users = await User.find({}).exec();
+
+  return users.map(({ discordId, messages }) => {
+    const total = messages.reduce((prev, curr) => prev + curr.count, 0);
+    return { discordId, total };
+  }).sort((a, b) => b.total - a.total);
+};
