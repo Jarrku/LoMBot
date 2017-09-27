@@ -1,19 +1,14 @@
-import { Message, Role, TextChannel } from "discord.js";
-import { Command, CommandoClient } from "discord.js-commando";
+import { CommandoClient } from "discord.js-commando";
 import { createServer } from "http";
-import * as path from "path";
-import { isInRoleCollection } from "./common";
-import { addNewMessage } from "./dataAccess";
-
-import config from "./config";
-import dbInit from "./db/init";
-import configureErrorLogging from "./util/errorLogger";
+import { onMessageHandler } from "./eventHandlers";
 
 import * as dotenv from "dotenv";
-dotenv.config();
-dbInit();
+import initiateDatabase from "./db/init";
+import configureErrorLogging from "./util/errorLogger";
+import configureClientRegistry from "./util/registry";
 
-const BOT_SECRET = process.env.NODE_ENV !== "production" ? process.env.BOT_SECRET_DEV : process.env.BOT_SECRET_PROD;
+dotenv.config();
+initiateDatabase();
 
 const client = new CommandoClient({
   disabledEvents: ["TYPING_START"],
@@ -23,30 +18,13 @@ const client = new CommandoClient({
 });
 
 configureErrorLogging(client);
+configureClientRegistry(client);
 
 client
   .on("ready", () => console.log("Bot is ready."))
-  .on("message", (msg: Message) => {
-    const { educhannels } = config;
-    const { channel: { id }, member: { roles } } = msg;
+  .on("message", onMessageHandler);
 
-    if (educhannels.includes(id)) {
-      if (isInRoleCollection(roles, undefined, ["mentor", "trial mentor"]))
-        addNewMessage(msg);
-    }
-  });
-
-client.registry
-  .registerGroups([["common", "Common"], ["util", "Utilities"]])
-  .registerDefaultTypes()
-  .registerDefaultCommands({
-    prefix: false,
-    eval_: false,
-    ping: false,
-    commandState: false,
-  })
-  .registerCommandsIn(path.join(__dirname, "commands"));
-
+const BOT_SECRET = process.env.NODE_ENV !== "production" ? process.env.BOT_SECRET_DEV : process.env.BOT_SECRET_PROD;
 client.login(BOT_SECRET!);
 
 if (process.env.NODE_ENV === "production") {
