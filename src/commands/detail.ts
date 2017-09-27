@@ -45,10 +45,5 @@ export default class Detail extends Command {
       .reduce((prev, curr) => prev += curr + "\n", title);
 
     return message.reply(formattedText);
-    /*
-    if (channel instanceof TextChannel) {
-      return channel.send(reply);
-    }
-    return message.reply(reply);*/
   }
 }
