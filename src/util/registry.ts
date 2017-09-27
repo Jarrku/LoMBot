@@ -11,5 +11,5 @@ export default (client: CommandoClient) => {
       ping: false,
       commandState: false,
     })
-    .registerCommandsIn(path.join(__dirname, "commands"));
+    .registerCommandsIn(path.join(__dirname, "../commands"));
 };
