@@ -1,6 +1,6 @@
 import { Message, TextChannel } from "discord.js";
 import { isInRoleCollection } from "./common";
-import UserRepository from "./db/userRepository";
+import MessageRepository from "./db/messageRepository";
 
 import config from "./config";
 
@@ -10,21 +10,15 @@ export const onMessageHandler = async (msg: Message) => {
 
   if (educhannels.includes(channel.id)) {
     if (isInRoleCollection(roles, "mentor", "trial mentor")) {
-      const repo = new UserRepository();
-      let user = await repo.getUser(id);
-      if (!user) {
-        user = await repo.createUser(id);
-      }
-
+      const repo = new MessageRepository();
       const { name } = (channel as TextChannel);
 
-      const newMsg = {
+      repo.create({
+        discordId: id,
         channel: name,
         count: content.split(" ").length,
         date: createdAt.valueOf(),
-      };
-
-      user.addMessage(newMsg);
+      });
     }
   }
 };
