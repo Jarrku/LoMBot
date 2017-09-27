@@ -1,31 +1,37 @@
-import { Message } from "discord.js";
+import { Message, TextChannel } from "discord.js";
 import { Argument, Command, CommandMessage, CommandoClient } from "discord.js-commando";
 import { timeframeArg } from "../common";
 import MessageRepository from "../db/messageRepository";
 
-export default class Overview extends Command {
+export default class Channel extends Command {
   constructor(client: CommandoClient) {
     super(client, {
-      name: "overview",
+      name: "channel",
       group: "common",
-      memberName: "overview",
-      description: "Displays overview of the wordcount",
-      examples: ["!overview 2w", "!overview 1d", "!overview 10 d"],
+      memberName: "channel",
+      description: "Displays overview of the wordcount of a channel",
+      examples: ["!channel top-lane 2w", "!channel mid 1d", "!channel support 10 d"],
       args: [
+        {
+          key: "channel",
+          label: "Channel to check",
+          prompt: "Need a valid channel to check against",
+          type: "channel",
+        },
         timeframeArg,
       ],
       guildOnly: true,
     });
   }
 
-  async run({ guild, message }: CommandMessage, { timeframe }: { timeframe: number }): Promise<Message | Message[]> {
+  async run({ guild, message }: CommandMessage, { timeframe, channel: { name } }: { timeframe: number, channel: TextChannel }): Promise<Message | Message[]> {
     const repo = new MessageRepository();
 
-    const repoQuery = timeframe !== 0 ? repo.getAll(timeframe) : repo.getAll();
+    const repoQuery = timeframe !== 0 ? repo.getFromChannel(name, timeframe) : repo.getFromChannel(name);
     const msgPromises = await repoQuery;
 
     const messages = repo.convert(...msgPromises);
-    const title = "Overview\n";
+    const title = `Overview of channel ${name}\n`;
 
     const userDict = messages.reduce((dict, { discordId, count }) => {
       const prevValue = dict.get(discordId);
