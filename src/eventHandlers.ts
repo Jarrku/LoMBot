@@ -1,6 +1,7 @@
 import { Message, TextChannel } from "discord.js";
 import { isInRoleCollection } from "./common";
-import MessageRepository from "./db/messageRepository";
+import MessageDB from "./model/message";
+
 
 import config from "./config";
 
@@ -10,10 +11,9 @@ export const onMessageHandler = async (msg: Message) => {
 
   if (educhannels.includes(channel.id)) {
     if (isInRoleCollection(roles, "mentor", "trial mentor")) {
-      const repo = new MessageRepository();
       const { name } = (channel as TextChannel);
 
-      repo.create({
+      MessageDB.create({
         discordId: id,
         channel: name,
         count: content.split(" ").length,

@@ -1,28 +1,67 @@
-import { IMessage, IMessageModel, Message, MessageDB } from "../model/message";
-import BaseRepo from "./baseRepository";
+import * as sequelize from "sequelize";
+import MessageDB from "../model/message";
 
-export default class MessageRepository extends BaseRepo<IMessageModel, IMessage> {
-  constructor() {
-    super(MessageDB);
-  }
-
+export default class MessageRepository {
   getFromChannel(channel: string, afterDate?: number) {
-    const query = afterDate ? { channel, date: { $gt: afterDate } } : { channel };
-    return super.find(query);
+    let opt = {};
+    if (afterDate) {
+      opt = {
+        date: {
+          [sequelize.Op.gt]: afterDate,
+        },
+      };
+    }
+
+    return MessageDB.findAll({
+      attributes: ["discordId", [sequelize.fn("SUM", sequelize.col("count")), "count"]],
+      group: "discordId",
+      raw: true,
+      where: {
+        channel,
+        ...opt,
+      },
+    });
   }
 
   getFromUser(discordId: string, afterDate?: number) {
-    const query = afterDate ? { discordId, date: { $gt: afterDate } } : { discordId };
-    return super.find(query);
+    let opt = {};
+    if (afterDate) {
+      opt = {
+        date: {
+          [sequelize.Op.gt]: afterDate,
+        },
+      };
+    }
+
+    return MessageDB.findAll({
+      attributes: ["channel", [sequelize.fn("SUM", sequelize.col("count")), "count"]],
+      group: "channel",
+      raw: true,
+      where: {
+        discordId,
+        ...opt,
+      },
+    });
   }
 
   getAll(afterDate?: number) {
-    const query = afterDate ? { date: { $gt: afterDate } } : {};
-    return super.find(query);
-  }
+    let opt = {};
+    if (afterDate) {
+      opt = {
+        date: {
+          [sequelize.Op.gt]: afterDate,
+        },
+      };
+    }
 
-  convert(...models: IMessageModel[]) {
-    return models.map((m) => new Message(m));
+    return MessageDB.findAll({
+      attributes: ["discordId", [sequelize.fn("SUM", sequelize.col("count")), "count"]],
+      group: "discordId",
+      raw: true,
+      where: {
+        ...opt,
+      },
+    });
   }
 }
 

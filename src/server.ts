@@ -1,14 +1,11 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import { CommandoClient } from "discord.js-commando";
 import { createServer } from "http";
 import { onMessageHandler } from "./eventHandlers";
 
-import * as dotenv from "dotenv";
-import initiateDatabase from "./db/init";
 import configureErrorLogging from "./util/errorLogger";
 import configureClientRegistry from "./util/registry";
-
-dotenv.config();
-initiateDatabase();
 
 const client = new CommandoClient({
   disabledEvents: ["TYPING_START"],
@@ -30,6 +27,7 @@ client.login(BOT_SECRET!);
 if (process.env.NODE_ENV === "production") {
   createServer().listen(3000);
 }
+
 // close websocket before exiting process
 process.on("SIGINT", () => {
   client.destroy();

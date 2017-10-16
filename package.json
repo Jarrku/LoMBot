@@ -5,17 +5,18 @@
   "author": "Simon VDB",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.16.2",
     "bufferutil": "^3.0.2",
     "discord.js": "^11.2.1",
     "discord.js-commando": "0.9.0",
     "dotenv": "^4.0.0",
-    "mongoose": "^4.11.13"
+    "pg": "^7.3.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.13.17"
   },
   "devDependencies": {
-    "@types/node": "^8.0.30",
     "@types/dotenv": "^4.0.1",
-    "@types/mongoose": "^4.7.23",
+    "@types/node": "^8.0.30",
+    "@types/sequelize": "4.0.76",
     "tslint": "^5.7.0",
     "typescript": "^2.5.2"
   },
@@ -35,8 +36,7 @@
       "BOT_SECRET_DEV": "@lom_bot_secret_dev",
       "DB_USERNAME": "@lom_db_username",
       "DB_PASSWORD": "@lom_db_password",
-      "DB_HOSTNAME": "@lom_db_hostname",
-      "DB_NAME": "@lom_db_name"
+      "DB_HOSTNAME": "@lom_db_hostname"
     }
   }
 }

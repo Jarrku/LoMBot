@@ -1,7 +1,8 @@
-import { Document, DocumentQuery, model, Schema } from "mongoose";
-import BaseClass from "./baseClass";
+import * as Sequelize from "sequelize";
+import postgres from "../db/postgres";
 
-// date in unix timestamp format
+const sequelize = postgres.instance;
+
 export interface IMessage {
   discordId: string;
   channel: string;
@@ -9,32 +10,22 @@ export interface IMessage {
   date: number;
 }
 
-export interface IMessageModel extends IMessage, Document { }
-
-const messageSchema = new Schema({
-  discordId: String,
-  channel: String,
-  count: Number,
-  date: Number,
+const Message = sequelize.define<IMessage, {}>("messages", {
+  discordId: {
+    type: Sequelize.STRING,
+  },
+  channel: {
+    type: Sequelize.STRING,
+  },
+  count: {
+    type: Sequelize.DOUBLE,
+  },
+  date: {
+    type: Sequelize.DOUBLE,
+  },
 });
 
-export const MessageDB = model<IMessageModel>("Message", messageSchema, "messages");
+// force: true will drop the table if it already exists
+Message.sync();
 
-export class Message extends BaseClass<IMessageModel> {
-  get discordId() {
-    return this.model.discordId;
-  }
-  get channel() {
-    return this.model.channel;
-  }
-
-  get count() {
-    return this.model.count;
-  }
-  get date() {
-    return this.model.date;
-  }
-}
-
-Object.seal(Message);
-export default MessageDB;
+export default Message;

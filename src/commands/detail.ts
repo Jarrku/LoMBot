@@ -1,7 +1,7 @@
 import { GuildMember, Message } from "discord.js";
 import { Argument, Command, CommandMessage, CommandoClient } from "discord.js-commando";
 import { timeframeArg } from "../common";
-import MessageRepository from "../db/messageRepository";
+import messageRepository from "../db/messageRepository";
 
 export default class Detail extends Command {
   constructor(client: CommandoClient) {
@@ -25,23 +25,15 @@ export default class Detail extends Command {
   }
 
   async run({ message }: CommandMessage, { timeframe, mentor: { id, displayName } }: { timeframe: number, mentor: GuildMember }): Promise<Message | Message[]> {
-    const repo = new MessageRepository();
-
+    const repo = new messageRepository();
     const repoQuery = timeframe !== 0 ? repo.getFromUser(id, timeframe) : repo.getFromUser(id);
     const msgPromises = await repoQuery;
 
-    const messages = repo.convert(...msgPromises);
     const title = `Overview of ${displayName}\n`;
 
-    const userDict = messages.reduce((dict, { channel, count }) => {
-      const prevValue = dict.get(channel);
-      const newValue = prevValue ? prevValue + count : count;
-      return dict.set(channel, newValue);
-    }, new Map<string, number>());
-
-    const formattedText = [...userDict.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .map(([channel, total]) => `- ${total} **${channel}**`)
+    const formattedText = msgPromises
+      .sort((a, b) => b.count - a.count)
+      .map(({ channel, count }) => `- ${count} **${channel}**`)
       .reduce((prev, curr) => prev += curr + "\n", title);
 
     return message.reply(formattedText);
