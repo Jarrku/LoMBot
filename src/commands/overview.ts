@@ -3,7 +3,6 @@ import { Argument, Command, CommandMessage, CommandoClient } from "discord.js-co
 import { timeframeArg } from "../common";
 import messageRepository from "../db/messageRepository";
 
-
 export default class Overview extends Command {
   constructor(client: CommandoClient) {
     super(client, {

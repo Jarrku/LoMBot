@@ -2,7 +2,6 @@ import { Message, TextChannel } from "discord.js";
 import { isInRoleCollection } from "./common";
 import MessageDB from "./model/message";
 
-
 import config from "./config";
 
 export const onMessageHandler = async (msg: Message) => {
