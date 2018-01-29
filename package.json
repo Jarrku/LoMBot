@@ -32,10 +32,10 @@
     "env": {
       "NODE_ENV": "production",
       "BOT_SECRET_PROD": "@lom_bot_secret_prod",
-      "BOT_SECRET_DEV": "@lom_bot_secret_dev",
       "DB_USERNAME": "@lom_db_username",
       "DB_PASSWORD": "@lom_db_password",
-      "DB_HOSTNAME": "@lom_db_hostname"
+      "DB_HOSTNAME": "@lom_db_hostname",
+      "DB_NAME": "@lom_db_name"
     }
   }
 }
