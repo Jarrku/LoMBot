@@ -5,9 +5,9 @@ export default class Postgres {
 
   static get instance() {
     if (!this._instance) {
-      const { DB_USERNAME, DB_PASSWORD, DB_HOSTNAME } = process.env;
+      const { DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOSTNAME } = process.env;
 
-      this._instance = new sql("postgres", DB_USERNAME!, DB_PASSWORD!, {
+      this._instance = new sql(DB_NAME!, DB_USERNAME!, DB_PASSWORD!, {
         logging: false,
         dialect: "postgres",
         host: DB_HOSTNAME,
