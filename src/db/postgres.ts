@@ -13,7 +13,7 @@ export default class Postgres {
         host: DB_HOSTNAME,
         port: 5432,
         dialectOptions: {
-          ssl: true,
+          ssl: false,
         },
       });
 
