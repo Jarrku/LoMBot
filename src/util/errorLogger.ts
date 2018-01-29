@@ -1,10 +1,6 @@
 import { CommandoClient, FriendlyError } from "discord.js-commando";
 
 export default (client: CommandoClient) => {
-  if (process.env.NODE_ENV !== "production") {
-    client.on("warn", console.warn).on("debug", console.info);
-  }
-
   client
     .on("error", console.error)
     .on("disconnect", () => console.warn("Disconnected!"))

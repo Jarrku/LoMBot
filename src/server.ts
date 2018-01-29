@@ -21,7 +21,7 @@ client
   .on("ready", () => console.log("Bot is ready."))
   .on("message", onMessageHandler);
 
-const BOT_SECRET = process.env.NODE_ENV !== "production" ? process.env.BOT_SECRET_DEV : process.env.BOT_SECRET_PROD;
+const BOT_SECRET = process.env.BOT_SECRET_PROD;
 client.login(BOT_SECRET!);
 
 if (process.env.NODE_ENV === "production") {
