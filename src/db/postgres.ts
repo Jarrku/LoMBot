@@ -15,6 +15,7 @@ export default class Postgres {
         dialectOptions: {
           ssl: false,
         },
+        pool: { idle: 1000, max: 1 }
       });
 
       this._instance.authenticate().then(() => console.log("Connected to the database"));

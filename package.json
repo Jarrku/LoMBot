@@ -5,20 +5,20 @@
   "author": "Simon VDB",
   "license": "MIT",
   "dependencies": {
-    "bufferutil": "3.0.2",
+    "bufferutil": "4.0.0",
     "discord.js": "11.2.1",
-    "discord.js-commando": "0.9.0",
-    "dotenv": "4.0.0",
-    "pg": "7.3.0",
+    "discord.js-commando": "0.10.0",
+    "dotenv": "6.0.0",
+    "pg": "7.4.3",
     "pg-hstore": "2.3.2",
-    "sequelize": "4.13.17"
+    "sequelize": "4.38.0"
   },
   "devDependencies": {
-    "@types/dotenv": "4.0.1",
-    "@types/node": "8.0.30",
+    "@types/dotenv": "4.0.3",
+    "@types/node": "10.5.2",
     "@types/sequelize": "4.0.76",
-    "tslint": "5.7.0",
-    "typescript": "2.5.2"
+    "tslint": "5.10.0",
+    "typescript": "2.9.2"
   },
   "scripts": {
     "transpile": "tsc",
@@ -28,7 +28,9 @@
   },
   "now": {
     "alias": "lom",
-    "files": ["build/**/*.js"],
+    "files": [
+      "build/**/*.js"
+    ],
     "env": {
       "NODE_ENV": "production",
       "BOT_SECRET_PROD": "@lom_bot_secret_prod",
